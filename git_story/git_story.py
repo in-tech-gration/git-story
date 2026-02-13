@@ -129,18 +129,34 @@ class GitStory(MovingCameraScene):
           self.play(FadeOut(toFadeOut), run_time=self.run_time)
 
         if ( self.args.show_outro ):
+          self.showOutro(logo, toFadeOut)
 
-            self.play(Restore(self.camera.frame))
+    def showOutro(self, logo, toFadeOut):
 
-            self.play(logo.animate.scale(4).set_x(0).set_y(0))
+      self.play(FadeOut(toFadeOut), run_time=self.run_time)
 
-            outroTopText = Text(self.args.outro_top_text, font="Monospace", font_size=36, color=self.fontColor).to_edge(UP, buff=1)
-            self.play(AddTextLetterByLetter(outroTopText))
+      self.play(Restore(self.camera.frame))
 
-            outroBottomText = Text(self.args.outro_bottom_text, font="Monospace", font_size=36, color=self.fontColor).to_edge(DOWN, buff=1)
-            self.play(AddTextLetterByLetter(outroBottomText))
+      self.play(logo.animate.scale(4).set_x(0).set_y(0))
 
-            self.wait(3)
+      outroTopText = Text(
+        self.args.outro_top_text,
+        font="Monospace",
+        font_size=36,
+        color=self.fontColor
+      ).to_edge(UP, buff=1)
+      
+      self.play(AddTextLetterByLetter(outroTopText))
+
+      outroBottomText = Text(
+        self.args.outro_bottom_text,
+        font="Monospace",
+        font_size=36,
+        color=self.fontColor
+      ).to_edge(DOWN, buff=1)
+      
+      self.play(AddTextLetterByLetter(outroBottomText))
+      self.wait(3)
 
     def parseCommits(self, commit, i, prevCircle, toFadeOut):
 
