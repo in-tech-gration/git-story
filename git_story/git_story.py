@@ -117,11 +117,16 @@ class GitStory(MovingCameraScene):
           )
 
         if ( toFadeOut.get_height() >= self.camera.frame.get_height() ):
-            self.play(self.camera.frame.animate.scale_to_fit_height(toFadeOut.get_height()*1.25), run_time=self.run_time)
+            self.play(
+              self.camera.frame.animate.scale_to_fit_height(toFadeOut.get_height()*1.25),
+              run_time=self.run_time
+            )
 
         self.wait(3)
 
-        self.play(FadeOut(toFadeOut), run_time=self.run_time)
+        # Whether or not to fade-out at the end of the video:
+        if ( self.args.fade_out ):
+          self.play(FadeOut(toFadeOut), run_time=self.run_time)
 
         if ( self.args.show_outro ):
 
@@ -242,7 +247,12 @@ class GitStory(MovingCameraScene):
                 x = 0
                 for branch in self.repo.heads:
                     if ( commit.hexsha == branch.commit.hexsha ):
-                        branchText = Text(branch.name, font="Monospace", font_size=20, color=self.fontColor)
+                        branchText = Text(
+                          branch.name, 
+                          font="Monospace", 
+                          font_size=20, 
+                          color=self.fontColor
+                        )
                         branchRec = Rectangle(color=GREEN, fill_color=GREEN, fill_opacity=0.25, height=0.4, width=branchText.width+0.25)
 
                         branchRec.next_to(prevRef, UP)
@@ -250,7 +260,11 @@ class GitStory(MovingCameraScene):
 
                         prevRef = branchRec 
 
-                        self.play(Create(branchRec), Create(branchText), run_time=self.run_time)
+                        self.play(
+                          Create(branchRec), 
+                          Create(branchText), 
+                          run_time=self.run_time
+                        )
                         toFadeOut.add(branchRec, branchText)
 
                         x += 1

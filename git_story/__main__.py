@@ -39,6 +39,8 @@ def main():
 
     parser.add_argument("--low-quality", help="Render output video in low quality, useful for faster testing", action="store_true")
 
+    parser.add_argument("--fade-out", help="Fade out at end", action="store_true")
+
     parser.add_argument("--light-mode", help="Enable light-mode with white background", action="store_true")
 
     parser.add_argument("--invert-branches", help="Invert positioning of branches where applicable", action="store_true")
