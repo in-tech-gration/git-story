@@ -2,6 +2,7 @@ from manim import *
 import git, sys, numpy
 
 class GitStory(MovingCameraScene):
+
     def __init__(self, args):
         super().__init__()
         self.args = args
@@ -28,7 +29,17 @@ class GitStory(MovingCameraScene):
             return self.childChainLength
 
     def construct(self):
+
+        repo_path = None
+
+        if ( self.args.repo.strip() != "" ):
+          repo_path = self.args.repo.strip()
+
         try:
+          if ( repo_path ):
+            print("Running git-story on: " + repo_path)
+            self.repo = git.Repo(repo_path, search_parent_directories=True)
+          else:
             self.repo = git.Repo(search_parent_directories=True)
         except git.exc.InvalidGitRepositoryError:
             print("git-story error: No Git repository found at current path.")
