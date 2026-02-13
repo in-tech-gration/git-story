@@ -43,7 +43,11 @@ def main():
 
     parser.add_argument("--invert-branches", help="Invert positioning of branches where applicable", action="store_true")
 
+    parser.add_argument("--enable-zoom-in-and-out", help="Enable momentarily zooming in and out on git history timeline", action="store_true")
+
     parser.add_argument("--speed", help="A multiple of the standard 1x animation speed (ex: 2 = twice as fast, 0.5 = half as fast)", type=float, default=1)
+
+    parser.add_argument('--circle-draw-effect', help="The effect to use for drawing the commit circles", choices=['draw', 'grow'], default="grow")
 
     args = parser.parse_args()
 

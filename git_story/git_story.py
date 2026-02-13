@@ -4,6 +4,7 @@ import git, sys, numpy
 class GitStory(MovingCameraScene):
 
     def __init__(self, args):
+
         super().__init__()
         self.args = args
         self.drawnCommits = {}
@@ -102,8 +103,17 @@ class GitStory(MovingCameraScene):
         toFadeOut = Group()
         self.parseCommits(commit, i, prevCircle, toFadeOut)
 
-        self.play(self.camera.frame.animate.move_to(toFadeOut.get_center()), run_time=1/self.args.speed)
-        self.play(self.camera.frame.animate.scale_to_fit_width(toFadeOut.get_width()*1.1), run_time=1/self.args.speed)
+        self.play(
+          self.camera.frame.animate.move_to(toFadeOut.get_center()), 
+          run_time=1/self.args.speed
+        )
+
+        # Momentarily Zoom in and out:
+        if ( self.args.enable_zoom_in_and_out):
+          self.play(
+            self.camera.frame.animate.scale_to_fit_width(toFadeOut.get_width()*1.1),
+            run_time=1/self.args.speed
+          )
 
         if ( toFadeOut.get_height() >= self.camera.frame.get_height() ):
             self.play(self.camera.frame.animate.scale_to_fit_height(toFadeOut.get_height()*1.25), run_time=1/self.args.speed)
@@ -127,6 +137,7 @@ class GitStory(MovingCameraScene):
             self.wait(3)
 
     def parseCommits(self, commit, i, prevCircle, toFadeOut):
+
         if ( i < self.args.commits and commit in self.commits ):
 
             if ( len(commit.parents) <= 1 ):
@@ -134,13 +145,18 @@ class GitStory(MovingCameraScene):
             else:
                 commitFill = GRAY
 
-            circle = Circle(stroke_color=commitFill, fill_color=commitFill, fill_opacity=0.25)
+            circle = Circle(
+              stroke_color=commitFill,
+              fill_color=commitFill,
+              fill_opacity=0.25
+            )
             circle.height = 1
 
             if prevCircle:
                 circle.next_to(prevCircle, RIGHT, buff=1.5)
 
             offset = 0
+
             while ( any((circle.get_center() == c).all() for c in self.getCenters()) ):
                 circle.next_to(circle, DOWN, buff=3.5)
                 offset += 1
@@ -182,14 +198,31 @@ class GitStory(MovingCameraScene):
                     if ( start[0] < end[0] and start[1] == end[1] ):
                         arrow.flip(RIGHT).shift(UP)
                 
-            commitId = Text(commit.hexsha[0:6], font="Monospace", font_size=20, color=self.fontColor).next_to(circle, UP)
+            commitId = Text(
+              commit.hexsha[0:6],
+              font="Monospace",
+              font_size=20,
+              color=self.fontColor
+            ).next_to(circle, UP)
 
             commitMessage = commit.message[:40].replace("\n", " ")
-            message = Text('\n'.join(commitMessage[j:j+20] for j in range(0, len(commitMessage), 20))[:100], font="Monospace", font_size=14, color=self.fontColor).next_to(circle, DOWN)
+
+            message = Text(
+              '\n'.join(commitMessage[j:j+20] for j in range(0, len(commitMessage), 20))[:100], 
+              font="Monospace",
+              font_size=14,
+              color=self.fontColor
+            ).next_to(circle, DOWN)
 
             if ( isNewCommit ):
 
-                self.play(self.camera.frame.animate.move_to(circle.get_center()), Create(circle), AddTextLetterByLetter(commitId), AddTextLetterByLetter(message), run_time=1/self.args.speed)
+                self.play(
+                  self.camera.frame.animate.move_to(circle.get_center()), 
+                  Create(circle) if ( self.args.circle_draw_effect == "draw" ) else GrowFromCenter(circle), 
+                  AddTextLetterByLetter(commitId), 
+                  AddTextLetterByLetter(message), 
+                  run_time=1/self.args.speed
+                )
                 self.drawnCommits[commit.hexsha] = circle
 
                 prevRef = commitId
@@ -240,8 +273,14 @@ class GitStory(MovingCameraScene):
                             break
 
             else:
-                self.play(self.camera.frame.animate.move_to(self.drawnCommits[commit.hexsha].get_center()), run_time=1/self.args.speed)
-                self.play(Create(arrow), run_time=1/self.args.speed)
+                self.play(
+                  self.camera.frame.animate.move_to(self.drawnCommits[commit.hexsha].get_center()), 
+                  run_time=1/self.args.speed
+                )
+                self.play(
+                  Create(arrow),
+                  run_time=1/self.args.speed
+                )
                 toFadeOut.add(arrow)
                 return
 
