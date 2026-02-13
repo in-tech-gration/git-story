@@ -49,9 +49,13 @@ def main():
 
     parser.add_argument('--circle-draw-effect', help="The effect to use for drawing the commit circles", choices=['draw', 'grow'], default="grow")
 
+    parser.add_argument('--verbosity-level', help="Set the logger verbosity level: CRITICAL, ERROR, WARNING, INFO, DEBUG", choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'], default="CRITICAL")
+
     args = parser.parse_args()
 
     config.media_dir = os.path.join(args.media_dir, "git-story_media")
+    if ( args.verbosity_level ):
+      config.verbosity = args.verbosity_level
 
     if ( args.low_quality ):
         config.quality = "low_quality"

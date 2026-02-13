@@ -141,7 +141,7 @@ class GitStory(MovingCameraScene):
 
         if ( i < self.args.commits and commit in self.commits ):
 
-            print(commit)
+            print("Parsing commit #" + commit.hexsha + " " + commit.message)
 
             if ( len(commit.parents) <= 1 ):
                 commitFill = RED
