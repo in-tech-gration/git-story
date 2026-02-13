@@ -53,9 +53,20 @@ def main():
 
     parser.add_argument('--verbosity-level', help="Set the logger verbosity level: CRITICAL, ERROR, WARNING, INFO, DEBUG", choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'], default="CRITICAL")
 
+    parser.add_argument("--disable-sections", help="Disable section video output and retain partial videos", action="store_true")
+
     args = parser.parse_args()
 
+    # Manim configuration options: https://docs.manim.community/en/stable/reference/manim._config.utils.ManimConfig.html
     config.media_dir = os.path.join(args.media_dir, "git-story_media")
+
+    config.flush_cache = True
+    config.save_sections = True
+
+    if ( args.disable_sections ):
+      config.flush_cache = False
+      config.save_sections = False
+
     if ( args.verbosity_level ):
       config.verbosity = args.verbosity_level
 

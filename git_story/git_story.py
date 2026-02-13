@@ -1,3 +1,5 @@
+# Fork: https://github.com/in-tech-gration/git-story
+# Original: https://initialcommit.com/tools/git-story
 from manim import *
 import git, sys, numpy
 
@@ -104,6 +106,7 @@ class GitStory(MovingCameraScene):
         toFadeOut = Group()
         self.parseCommits(commit, i, prevCircle, toFadeOut)
 
+        self.next_section("Centering")
         self.play(
           self.camera.frame.animate.move_to(toFadeOut.get_center()), 
           run_time=self.run_time
@@ -111,6 +114,7 @@ class GitStory(MovingCameraScene):
 
         # Momentarily Zoom in and out:
         if ( self.args.enable_zoom_in_and_out):
+          self.next_section("Zoom In Out")
           self.play(
             self.camera.frame.animate.scale_to_fit_width(toFadeOut.get_width()*1.1),
             run_time=self.run_time
@@ -122,6 +126,8 @@ class GitStory(MovingCameraScene):
               run_time=self.run_time
             )
 
+        self.next_section("The End")
+
         self.wait(3)
 
         # Whether or not to fade-out at the end of the video:
@@ -132,6 +138,8 @@ class GitStory(MovingCameraScene):
           self.showOutro(logo, toFadeOut)
 
     def showOutro(self, logo, toFadeOut):
+
+      self.next_section("Show Outro")
 
       self.play(FadeOut(toFadeOut), run_time=self.run_time)
 
@@ -163,6 +171,8 @@ class GitStory(MovingCameraScene):
         if ( i < self.args.commits and commit in self.commits ):
 
             print("Parsing commit #" + commit.hexsha + " " + commit.message)
+
+            self.next_section("Commit " + commit.hexsha)
 
             if ( len(commit.parents) <= 1 ):
                 commitFill = RED
