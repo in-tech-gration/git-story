@@ -1,9 +1,11 @@
 from git_story import git_story as gs
-import os
+import os, sys
 import argparse
 import pathlib
 from manim import config, WHITE
 from manim.utils.file_ops import open_file as open_media_file
+
+__version__ = "0.2.0"
 
 def main():
 
@@ -55,13 +57,25 @@ def main():
 
     parser.add_argument("--disable-sections", help="Disable section video output and retain partial videos", action="store_true")
 
+    parser.add_argument("--save-as-gif", help="Save as GIF", action="store_true")
+
+    parser.add_argument("--version", help="Show version", action="store_true")
+
     args = parser.parse_args()
+
+    if ( args.version ):
+      print(f"git-story (x) version {__version__}")
+      sys.exit(1)
 
     # Manim configuration options: https://docs.manim.community/en/stable/reference/manim._config.utils.ManimConfig.html
     config.media_dir = os.path.join(args.media_dir, "git-story_media")
 
     config.flush_cache = True
     config.save_sections = True
+
+    if ( args.save_as_gif ): 
+      print("Saving as GIF")
+      config.save_as_gif = True
 
     if ( args.disable_sections ):
       config.flush_cache = False
